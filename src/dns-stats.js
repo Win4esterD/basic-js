@@ -22,9 +22,40 @@ const { NotImplementedError } = require('../extensions/index.js');
  * }
  *
  */
-function getDNSStats(/* domains */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+ function reverser(domain){
+  return domain.split('.').reverse().join('.')
+}
+
+
+function getDNSStats(domains) {
+let domain_counter = {}
+let dots_counter = []
+
+if(domains == undefined){
+  return {}
+}
+
+for(let domain of domains){
+  let reversed_domain = reverser(domain);
+  for(let i = 0; i<reversed_domain.length; i++){
+    if(reversed_domain[i] == '.' || i == reversed_domain.length - 1){
+      if(Object.keys(domain_counter).includes('.' + dotChecker(reversed_domain.slice(0, i+1)))){
+        domain_counter['.' + dotChecker(reversed_domain.slice(0, i+1))] += 1
+      }else{
+        domain_counter['.' + dotChecker(reversed_domain.slice(0, i+1))] = 1
+      }
+    }
+  }
+}
+return domain_counter
+}
+
+function dotChecker(str){
+if(str[str.length-1] == '.'){
+  return str.slice(0, str.length-1)
+  }
+
+  return str;
 }
 
 module.exports = {
