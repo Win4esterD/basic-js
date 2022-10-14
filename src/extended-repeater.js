@@ -15,44 +15,31 @@ const { NotImplementedError } = require('../extensions/index.js');
  * => 'STRINGPLUS00PLUS00PLUS**STRINGPLUS00PLUS00PLUS**STRINGPLUS00PLUS00PLUS'
  *
  */
- function repeater(str, options) {
-  // throw new NotImplementedError('Not implemented');
-  let new_string = '';
+ function repeater(str, options){
+  let repeated = '';
+  let separator = options.separator === undefined ? '+' : options.separator;
+  let repeatTimes = options.repeatTimes === undefined ? 0 : options.repeatTimes;
+  let addition = '';
+  let additionSeparator = options.additionSeparator === undefined ? '|': options.additionSeparator;
+  let additionRepeatTimes = options.additionRepeatTimes === undefined ? 0 : options.additionRepeatTimes;
 
-  if(!options.repeatTimes){
-    options.repeatTimes = 1;
-  }
-  
-
-  /* if(!options.additionRepeatTimes){
-    options.additionRepeatTimes = options.repeatTimes
-  } */
-
-  options.additionRepeatTimes = options.repeatTimes
-  
-  if(!options.separator){
-    options.separator = '+'
-  }
-  if(!options.additionSeparator){
-      options.additionSeparator = '|'
-  }
-
-  if(!options.addition){
-    options.addition = '';
-  }
-
-  for(let i = 0; i<options.repeatTimes; i++){
-    new_string += str;
-    if(options.additionRepeatTimes > 0){
-      new_string += options.addition
-      options.additionRepeatTimes -= 1
+  if(options.additionRepeatTimes === undefined && options.addition !== undefined){
+    addition += options.addition
+  }else{
+    for(let i = 0; i < additionRepeatTimes; i++){
+      addition += options.addition + additionSeparator
     }
-    if(i<options.repeatTimes-1){
-      new_string += options.separator;
-    }
+    addition = addition.slice(0, -additionSeparator.length)
   }
-
-  return new_string;
+  if(options.repeatTimes === undefined && str !== undefined){
+    repeated += str + addition
+  }else{
+    for(let i = 0; i < repeatTimes; i++){
+      repeated += str + addition + separator
+    }
+    repeated = repeated.slice(0, -separator.length);
+  }
+  return repeated
 }
 
 module.exports = {
